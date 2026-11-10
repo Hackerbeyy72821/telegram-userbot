@@ -2,11 +2,11 @@ import os
 import asyncio
 from telethon import TelegramClient
 
-# Railway'e eklediğimiz çevresel değişkenlerden (Variables) bilgileri alıyoruz
-API_ID = int(os.environ.get("API_ID", 0))
-API_HASH = os.environ.get("API_HASH", "")
+# Railway'e veya ayarlara tanımladığımız bilgiler
+API_ID = 33874556
+API_HASH = '94e5e87725311749941fdbe7650cfc0e'
 
-# Mesaj gönderilecek hedef grupların kullanıcı adları
+# Mesaj gönderilecek hedef gruplar (Kendi hesabının üye olduğu gruplar olmalı)
 GROUPS = [
     "@iptvkartal",
     "@illegalforshell",
@@ -29,10 +29,11 @@ MESSAGE = """⚡ 𝕩  GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 🔥 𝕩 TİCARETİN DOĞRU ADRESİ - İŞİNİ BİLENLER YAZSIN 𝕩 🔥"""
 
+# 'userbot_session' adında bir oturum dosyası oluşturur
 client = TelegramClient('userbot_session', API_ID, API_HASH)
 
 async def main():
-    print("Userbot başarıyla bağlandı ve çalışıyor!")
+    print("Kişisel hesap userbotu başarıyla bağlandı ve çalışıyor!")
     
     while True:
         for group in GROUPS:
