@@ -1,18 +1,20 @@
 import asyncio
 from telethon import TelegramClient
+from telethon.sessions import StringSession
+import os
 
-# Senin API bilgilerin
-API_ID = 877253117499
+API_ID = 33874556
 API_HASH = '94e5e87725311749941fdbe7650cfc0e'
 
-# Mesaj göndermek istediğin gruplar ve kanallar
+# Render'a eklediğimiz gizli oturum anahtarını alıyoruz
+SESSION_STRING = os.environ.get('SESSION_STRING', '')
+
 GRUPLAR = [
     'https://t.me/aslantcrt11',
     'https://t.me/iptvkartal',
     '@illegalforshell'
 ]
 
-# Gönderilmesini istediğin taslak mesaj
 MESAJ = """⚡ 𝕩 GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 💎 PREMİUM TİCARET VE ÖDEME KANALI 💎
@@ -28,10 +30,9 @@ MESAJ = """⚡ 𝕩 GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 🔥 𝕩 TİCARETİN DOĞRU ADRESİ - İŞİNİ BİLENLER YAZSIN 𝕩 🔥"""
 
-# Kaç dakikada bir gönderilsin? (Örn: 2 dakika)
 DAKIKA_ARALIGI = 2
 
-client = TelegramClient('userbot_session', API_ID, API_HASH)
+client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 
 async def mesaj_dongusu():
     await client.start()
@@ -42,12 +43,10 @@ async def mesaj_dongusu():
             for hedef in GRUPLAR:
                 await client.send_message(hedef, MESAJ)
                 print(f"Mesaj gönderildi: {hedef}")
-                # Gruplar arası spam'e düşmemek için 3 saniye minik bekleme
                 await asyncio.sleep(3)
         except Exception as e:
             print(f"Hata oluştu: {e}")
         
-        # Belirlenen dakika kadar bekle
         await asyncio.sleep(DAKIKA_ARALIGI * 60)
 
 if __name__ == '__main__':
