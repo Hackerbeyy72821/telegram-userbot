@@ -1,5 +1,4 @@
 import asyncio
-import os
 from telethon import TelegramClient
 
 API_ID = 33874556
@@ -28,23 +27,9 @@ MESAJ = """⚡ 𝕩 GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 DAKIKA_ARALIGI = 2
 
-# Oturum dosyasının tam adı (uzantısız olarak TelegramClient kendi ekler)
 client = TelegramClient('userbot_session', API_ID, API_HASH)
 
-async def mesaj_dongusu():
-    print("Userbot başlatılıyor...")
-    
-    try:
-        await client.connect()
-        if not await client.is_user_authorized():
-            print("HATA: userbot_session oturumu yetkilendirilmemiş! Dosya adını veya konumunu kontrol et.")
-            return
-    except Exception as e:
-        print(f"Bağlantı hatası: {e}")
-        return
-
-    print("Userbot başarıyla bağlandı ve çalışıyor!")
-    
+async def mesaj_gonderici():
     while True:
         try:
             for hedef in GRUPLAR:
@@ -52,10 +37,20 @@ async def mesaj_dongusu():
                 print(f"Mesaj gönderildi: {hedef}")
                 await asyncio.sleep(3)
         except Exception as e:
-            print(f"Mesaj gönderme hatası: {e}")
+            print(f"Hata: {e}")
         
         await asyncio.sleep(DAKIKA_ARALIGI * 60)
 
+async def main():
+    print("Userbot başlatılıyor...")
+    await client.start()
+    print("Userbot başarıyla bağlandı ve çalışıyor!")
+    
+    # Arka plan döngüsünü başlat
+    client.loop.create_task(mesaj_gonderici())
+    
+    # Botun 7/24 düşmeden çalışmasını sağla
+    await client.run_until_disconnected()
+
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(mesaj_dongusu())
+    client.loop.run_until_complete(main())
