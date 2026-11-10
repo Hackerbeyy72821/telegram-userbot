@@ -1,13 +1,9 @@
 import asyncio
-from telethon import TelegramClient
-from telethon.sessions import StringSession
 import os
+from telethon import TelegramClient
 
 API_ID = 33874556
 API_HASH = '94e5e87725311749941fdbe7650cfc0e'
-
-# Render'a eklediğimiz gizli oturum anahtarını alıyoruz
-SESSION_STRING = os.environ.get('SESSION_STRING', '')
 
 GRUPLAR = [
     'https://t.me/aslantcrt11',
@@ -32,11 +28,22 @@ MESAJ = """⚡ 𝕩 GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 DAKIKA_ARALIGI = 2
 
-client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
+# Oturum dosyasının tam adı (uzantısız olarak TelegramClient kendi ekler)
+client = TelegramClient('userbot_session', API_ID, API_HASH)
 
 async def mesaj_dongusu():
-    await client.start()
-    print("Userbot başarıyla başlatıldı ve çalışıyor!")
+    print("Userbot başlatılıyor...")
+    
+    try:
+        await client.connect()
+        if not await client.is_user_authorized():
+            print("HATA: userbot_session oturumu yetkilendirilmemiş! Dosya adını veya konumunu kontrol et.")
+            return
+    except Exception as e:
+        print(f"Bağlantı hatası: {e}")
+        return
+
+    print("Userbot başarıyla bağlandı ve çalışıyor!")
     
     while True:
         try:
@@ -45,10 +52,10 @@ async def mesaj_dongusu():
                 print(f"Mesaj gönderildi: {hedef}")
                 await asyncio.sleep(3)
         except Exception as e:
-            print(f"Hata oluştu: {e}")
+            print(f"Mesaj gönderme hatası: {e}")
         
         await asyncio.sleep(DAKIKA_ARALIGI * 60)
 
 if __name__ == '__main__':
-    with client:
-        client.loop.run_until_complete(mesaj_dongusu())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(mesaj_dongusu())
