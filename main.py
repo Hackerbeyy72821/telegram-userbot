@@ -1,10 +1,14 @@
 import os
 import asyncio
 from telethon import TelegramClient
+from telethon.sessions import StringSession
 
-# Railway'e tanımladığın API bilgileri
+# Senin API bilgilerim
 API_ID = 33874556
 API_HASH = '94e5e87725311749941fdbe7650cfc0e'
+
+# Pydroid'den aldığın o efsane String Session kodunu buradaki tırnak içine yapıştır:
+SESSION_STRING = "1BJWap1wBu73yAU0WrzfEUYp3Eu-kccLd4854Ox26ZtKW0PmR3OBeHyVlGLaV7SxxuLqRjSAGdN-uFZKHOxFgzO02OH5uC-a40N49A4sEtGw5dx0UYNTg9SAtTXkysoVoR2KqOmXI6UDfbXPYgARZFv7-aFQExr0L-1tgC3b9jVw-ySmeIMop8fsv93orBIgQ_ToVbGODvuUYe44lB0GNREfVJKQ_QXud-0-X78LPArev7Qi5KDFGjJjp3MlEztiWUpp0VvUBnGkQbI8HwtfaVgYn6pBMc8y-iYmVhhj7c6fFftcpWm4Rh6kmnYpju2fBOlYu-qS8fPOKLJ51vBgt27eKEYXw_pM="
 
 # Mesaj gönderilecek hedef gruplar
 GROUPS = [
@@ -13,7 +17,7 @@ GROUPS = [
     "@illegalforshell"
 ]
 
-# Senin hazırladığın özel tanıtım mesajı
+# Gönderilecek tanıtım mesajı
 MESSAGE = """⚡ 𝕩  GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 💎 PREMİUM TİCARET VE ÖDEME KANALI 💎
@@ -29,8 +33,7 @@ MESSAGE = """⚡ 𝕩  GÜVENLİ İŞLEM MERKEZİ  𝕩 ⚡
 
 🔥 𝕩 TİCARETİN DOĞRU ADRESİ - İŞİNİ BİLENLER YAZSIN 𝕩 🔥"""
 
-# Oturum dosyasını oluşturuyoruz
-client = TelegramClient('userbot_session', API_ID, API_HASH)
+client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 
 async def main():
     print("Userbot başarıyla aktif edildi, mesaj döngüsü başlatılıyor...")
@@ -50,6 +53,4 @@ async def main():
         await asyncio.sleep(600)
 
 with client:
-    # client.start() komutu ilk çalıştırmada telefon numarası ve kod isteyecektir
-    client.start()
     client.loop.run_until_complete(main())
